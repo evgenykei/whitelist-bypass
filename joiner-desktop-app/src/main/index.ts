@@ -119,10 +119,10 @@ function spawnJoiner(settings: JoinerSettings): { ok: boolean; error?: string } 
   if (settings.socksUser) args.push('--socks-user', settings.socksUser);
   if (settings.socksPass) args.push('--socks-pass', settings.socksPass);
   if (noTun) args.push('--no-tun');
-  if (settings.dualTrack && (settings.platform === 'vk' || settings.platform === 'wbstream')) {
+  if (settings.dualTrack && (settings.platform === 'vk' || settings.platform === 'wbstream' || settings.platform === 'bitrix')) {
     args.push('--dual-track');
   }
-  if (settings.reliable && settings.platform === 'wbstream') {
+  if (settings.reliable && (settings.platform === 'wbstream' || settings.platform === 'bitrix')) {
     args.push('--reliable');
   }
 

@@ -1,4 +1,4 @@
-type JoinerPlatform = 'wbstream' | 'telemost' | 'vk' | 'dion';
+type JoinerPlatform = 'wbstream' | 'telemost' | 'vk' | 'dion' | 'bitrix';
 
 function detectPlatform(url: string): JoinerPlatform | null {
   const u = url.toLowerCase();
@@ -6,6 +6,7 @@ function detectPlatform(url: string): JoinerPlatform | null {
   if (u.includes('wbstream://') || u.includes('stream.wb.ru')) return 'wbstream';
   if (u.includes('telemost.yandex')) return 'telemost';
   if (u.includes('dion://') || u.includes('dion.vc')) return 'dion';
+  if (u.includes('bitrix24') && u.includes('/video/')) return 'bitrix';
   return 'vk';
 }
 
@@ -15,6 +16,7 @@ function platformLabel(p: JoinerPlatform | null): string {
     case 'telemost': return 'Telemost';
     case 'vk': return 'VK';
     case 'dion': return 'DION';
+    case 'bitrix': return 'Bitrix';
     default: return '-';
   }
 }
