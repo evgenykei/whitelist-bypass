@@ -122,7 +122,7 @@ function spawnJoiner(settings: JoinerSettings): { ok: boolean; error?: string } 
   if (settings.dualTrack && (settings.platform === 'vk' || settings.platform === 'wbstream' || settings.platform === 'bitrix')) {
     args.push('--dual-track');
   }
-  if (settings.reliable && (settings.platform === 'wbstream' || settings.platform === 'bitrix')) {
+  if (settings.reliable && (settings.platform === 'wbstream' || settings.platform === 'bitrix' || settings.platform === 'telemost')) {
     args.push('--reliable');
   }
 
