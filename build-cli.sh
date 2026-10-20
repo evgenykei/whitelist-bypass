@@ -18,10 +18,12 @@ telemost:headless-telemost-creator \
 wbstream:headless-wbstream-creator \
 dion:headless-dion-creator \
 bitrix:headless-bitrix-creator \
+blink:headless-blink-creator \
 telemost-joiner:headless-telemost-joiner \
 wbstream-joiner:headless-wbstream-joiner \
 dion-joiner:headless-dion-joiner \
 bitrix-joiner:headless-bitrix-joiner \
+blink-joiner:headless-blink-joiner \
 vk-bot:headless-vk-bot"
 
 build_target() {
