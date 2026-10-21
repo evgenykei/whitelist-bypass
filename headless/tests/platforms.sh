@@ -8,6 +8,8 @@ cookies_path() {
         wbstream) _f="cookies-wbstream.json" ;;
         dion) _f="cookies-dion.json" ;;
         bitrix) _f="cookies-bitrix.json" ;;
+        blink) _f="cookies-blink.json" ;;
+        blink_joiner) _f="cookies-blink-joiner.json" ;;
         *) _f="cookies-$_p.json" ;;
     esac
     _envname=$(printf 'COOKIES_%s' "$(echo "$_p" | tr 'a-z' 'A-Z')")
@@ -28,6 +30,7 @@ room_value() {
 pf_select() {
     PF_NAME="$1"
     PF_JOINER_MODE=""
+    PF_JOINER_COOKIES=""
     case "$1" in
         vk)
             PF_CREATOR="$HEADLESS/vk/headless-vk-creator"
@@ -68,6 +71,15 @@ pf_select() {
             PF_CREATOR_ROOM_FLAG="--room"
             PF_READY_RE="pub PC state: connected"
             PF_CAPS="connect dc kcp dual kick"
+            ;;
+        blink)
+            PF_CREATOR="$HEADLESS/blink/headless-blink-creator"
+            PF_JOINER="$HEADLESS/blink-joiner/headless-blink-joiner"
+            PF_JOINER_COOKIES=$(cookies_path blink_joiner)
+            PF_LINK_FLAG="--room"
+            PF_CREATOR_ROOM_FLAG="--room"
+            PF_READY_RE="pub PC state: connected"
+            PF_CAPS="connect dc kcp dual"
             ;;
         *)
             die "unknown platform: $1"

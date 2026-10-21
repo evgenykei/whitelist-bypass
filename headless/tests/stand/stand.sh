@@ -13,10 +13,12 @@ telemost/headless-telemost-creator \
 wbstream/headless-wbstream-creator \
 dion/headless-dion-creator \
 bitrix/headless-bitrix-creator \
+blink/headless-blink-creator \
 telemost-joiner/headless-telemost-joiner \
 wbstream-joiner/headless-wbstream-joiner \
 dion-joiner/headless-dion-joiner \
-bitrix-joiner/headless-bitrix-joiner"
+bitrix-joiner/headless-bitrix-joiner \
+blink-joiner/headless-blink-joiner"
 
 usage() {
     cat >&2 <<EOF
@@ -83,7 +85,7 @@ case "${1:-}" in
     run)
         shift
         cookie_mounts=""
-        for c in vk yandex wbstream dion bitrix; do
+        for c in vk yandex wbstream dion bitrix blink blink-joiner; do
             f="$REPO/cookies-$c.json"
             [ -f "$f" ] && cookie_mounts="$cookie_mounts -v $f:/cookies/cookies-$c.json"
         done

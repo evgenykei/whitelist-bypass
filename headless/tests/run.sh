@@ -16,7 +16,7 @@ CONNECT_TIMEOUT="${CONNECT_TIMEOUT:-45}"
 PROBE_TIMEOUT="${PROBE_TIMEOUT:-20}"
 KICK_TIMEOUT="${KICK_TIMEOUT:-30}"
 
-ALL_PLATFORMS="telemost wbstream dion bitrix"
+ALL_PLATFORMS="telemost wbstream dion bitrix blink"
 ALL_SCENARIOS="connect dc kcp dual kick"
 
 usage() {
@@ -41,7 +41,7 @@ for _arg in "$@"; do
             usage
             exit 0
             ;;
-        vk | telemost | wbstream | dion | bitrix)
+        vk | telemost | wbstream | dion | bitrix | blink)
             RUN_PLATFORMS="$RUN_PLATFORMS $_arg"
             ;;
         connect | dc | kcp | dual | kick)

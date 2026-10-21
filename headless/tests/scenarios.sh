@@ -13,6 +13,11 @@ run_platform() {
         record SKIP "$1 (cookies missing)"
         return
     fi
+    if [ -n "$PF_JOINER_COOKIES" ] && [ ! -f "$PF_JOINER_COOKIES" ]; then
+        log "=== $1 SKIP (joiner cookies not found at $PF_JOINER_COOKIES) ==="
+        record SKIP "$1 (joiner cookies missing)"
+        return
+    fi
     if [ -z "$PF_ROOM" ] && [ "${ALLOW_NEW_ROOMS:-0}" != "1" ]; then
         log "=== $1 SKIP (no ROOM_$(echo "$1" | tr 'a-z' 'A-Z') set; refusing to create a new room. Set it in .env or pass ALLOW_NEW_ROOMS=1) ==="
         record SKIP "$1 (no room)"
@@ -108,6 +113,9 @@ start_joiner() {
         return
     fi
     _flags=$(pf_variant_flags "$_variant")
+    if [ -n "$PF_JOINER_COOKIES" ]; then
+        _flags="$_flags --cookies $PF_JOINER_COOKIES"
+    fi
     $JOINER_WRAP "$PF_JOINER" "$PF_LINK_FLAG" "$JOIN_LINK" --socks-host "$JOINER_SOCKS_HOST" --socks-port "$JOINER_PORT" $_flags >"$JOINER_LOG" 2>&1 &
     JOINER_PID=$!
     track_pid "$JOINER_PID"

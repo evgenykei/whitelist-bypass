@@ -12,8 +12,9 @@ No external network is used.
 
 ## Platforms and scenarios
 
-Platforms: telemost, wbstream, dion, bitrix, vk. A platform skips the scenarios it
-does not support: dion supports only connect and kick, vk only connect and dc.
+Platforms: telemost, wbstream, dion, bitrix, blink, vk. A platform skips the scenarios it
+does not support: dion supports only connect and kick, vk only connect and dc, blink
+everything except kick.
 
 `vk` runs only when named, needs `relay/relay` from `./build-go.sh`, and opens the VK
 captcha in your browser.
@@ -39,6 +40,18 @@ conference. To create new conferences, set `ALLOW_NEW_ROOMS=1`.
 Each platform reads `cookies-<platform>.json` from the repository root. Export
 these from the desktop creator app. If a cookie file is missing, the harness skips
 that platform.
+
+## Blink
+
+Blink has no guest access, so the creator and the joiner each need their own login.
+Both can be the same account, but every login must be a separate QR scan. Create the
+two files from the repository root, scanning each QR with the Blink app:
+
+    ./headless/blink/headless-blink-creator --login --cookies cookies-blink.json
+    ./headless/blink/headless-blink-creator --login --cookies cookies-blink-joiner.json
+
+`ROOM_BLINK` is a chat id. The creator joins the call in that chat, and starts one if
+the chat has no active call. The joiner's account must be a member of the chat.
 
 ## Run in Docker
 
