@@ -62,19 +62,19 @@ func (c *Credentials) AccessToken() (string, error) {
 }
 
 func (c *Credentials) ConnectCall(chatID int64) (CallConnection, error) {
-	accessToken, err := c.AccessToken()
-	if err != nil {
-		return CallConnection{}, err
-	}
-	connection, err := ConnectCall(c.client, accessToken, chatID)
-	if !IsUnauthorized(err) {
-		return connection, err
-	}
-	c.logFn("[auth] calls connect returned 401, refreshing tokens")
-	if err := c.refresh(); err != nil {
-		return CallConnection{}, err
-	}
-	return ConnectCall(c.client, c.tokens.Token, chatID)
+	return withAccessToken(c, "calls connect", func(accessToken string) (CallConnection, error) {
+		return ConnectCall(c.client, accessToken, chatID)
+	})
+}
+
+func (c *Credentials) CreateChat(name string) (int64, error) {
+	return withAccessToken(c, "group chat create", func(accessToken string) (int64, error) {
+		accountID, err := FetchAccountID(c.client, accessToken)
+		if err != nil {
+			return 0, err
+		}
+		return CreateGroupChat(c.client, accessToken, accountID, name)
+	})
 }
 
 func (c *Credentials) refresh() error {
@@ -100,6 +100,23 @@ func (c *Credentials) refresh() error {
 	c.logFn("[auth] tokens refreshed and saved, access expires %s",
 		time.Unix(fresh.TokenExpiresAt, 0).UTC().Format(time.RFC3339))
 	return nil
+}
+
+func withAccessToken[T any](c *Credentials, operation string, request func(accessToken string) (T, error)) (T, error) {
+	var empty T
+	accessToken, err := c.AccessToken()
+	if err != nil {
+		return empty, err
+	}
+	result, err := request(accessToken)
+	if !IsUnauthorized(err) {
+		return result, err
+	}
+	c.logFn("[auth] %s returned 401, refreshing tokens", operation)
+	if err := c.refresh(); err != nil {
+		return empty, err
+	}
+	return request(c.tokens.Token)
 }
 
 func readTokens(path string) (TokenPair, error) {
